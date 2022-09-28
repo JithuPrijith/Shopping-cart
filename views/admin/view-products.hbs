@@ -1,0 +1,31 @@
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="mx-auto m-4">
+            <a href="admin/add-product" class="btn btn-success">Add Products</a>
+            </div>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">no</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                {{#each products}}
+                <tbody>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>{{this.name}}</td>
+                        <td>{{this.Category}}</td>
+                        <td>{{this.description}}</td>
+                    </tr>
+                </tbody>
+                {{/each}}
+            </table>
+        </div>
+    </div>
+</section>
