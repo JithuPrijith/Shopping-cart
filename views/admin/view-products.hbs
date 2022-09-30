@@ -13,15 +13,19 @@
                         <th scope="col">Name</th>
                         <th scope="col">Category</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Image</th>
                     </tr>
                 </thead>
                 {{#each products}}
                 <tbody>
                     <tr>
-                        <th scope="row"></th>
-                        <td>{{this.name}}</td>
-                        <td>{{this.Category}}</td>
-                        <td>{{this.description}}</td>
+                        <th class="align-middle" scope="row">{{@index}}</th>
+                        <td class="align-middle">{{this.name}}</td>
+                        <td class="align-middle">{{this.category}}</td>
+                        <td class="align-middle">{{this.description}}</td>
+                        <td class="align-middle">{{this.price}}</td>
+                        <td class="align-middle"><img style="width:30px; height: 40px;" src="/product-images/{{this._id}}.png" alt=""></td>
                     </tr>
                 </tbody>
                 {{/each}}

@@ -21,6 +21,6 @@ const productSchema = new schema({
     }
 })
 
-const Products = mongoose.model('add-product', productSchema)
+const Products = mongoose.model('product-datas', productSchema)
 
 module.exports = Products;

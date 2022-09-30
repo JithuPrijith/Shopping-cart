@@ -2,15 +2,15 @@
 
     <section>
         <div class="container">
-            <h1>display page</h1>
+        
             <div class="row bg-info mt-5">
                 {{#each products}}
 
                 <div class="col-3">
                     <div class="card">
-                        <img src="" class="card-img-top" alt="...">
+                        <img src="/product-images/{{this._id}}.png" class="card-img-top mx-auto" alt="..." style="width: 10rem; height: 6rem;">
                         <div class="card-body">
-                            <h5 class="card-title">{{this.name}}</h5>
+                            <h6 class="card-title">{{this.name}}</h6>
                             <p class="card-text">{{this.description}}</p>
                             <a href="#" class="btn btn-primary">Add to cart</a>
                         </div>

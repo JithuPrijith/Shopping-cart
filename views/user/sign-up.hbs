@@ -1,0 +1,48 @@
+<section class="bg-image"
+  style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+  <div class="mask d-flex align-items-center gradient-custom-3">
+    <div class="container">
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-md-9 col-lg-6 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body px-5">
+              <h2 class="text-uppercase text-center mb-2">Create an account</h2>
+
+              <form action="/signup" method="post">
+
+                <div class="form-outline mb-1">
+                  <input type="text" id="form3Example1cg" name="username" class="form-control form-control-md w-75 mx-auto mb-3" placeholder="enter username"/>
+                </div>
+
+                <div class="form-outline mb-1">
+                  <input type="email" id="form3Example3cg" name="userEmail" class="form-control form-control-md w-75 mx-auto mb-3" placeholder="enter email"/>
+             
+                </div>
+
+                <div class="form-outline mb-1">
+                  <input type="password" id="userPasword" name="userPassword" onchange="confirmPassword()" class="form-control form-control-md w-75 mx-auto mb-3" placeholder="enter password"/>
+                
+                </div>
+
+                <div class="form-outline mb-1">
+                  <input type="password" id="userConfirmPassword" name="userConfirmPassword" onchange="confirmPassword()" class="form-control form-control-md w-75 mx-auto mb-3" placeholder="repeat password"/>
+                 
+                </div>
+
+                <div class="d-flex justify-content-center pt-2">
+                  <button type="submit"
+                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
+                </div>
+
+                <p class="text-center text-muted  pt-3">Have already an account? <a href="/signIn"
+                    class="fw-bold text-body"><u>Login here</u></a></p>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
