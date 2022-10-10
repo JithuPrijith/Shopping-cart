@@ -1,5 +1,7 @@
-const { body, validationResult, check } = require('express-validator')
+const { body, validationResult, check } = require('express-validator');
+const userServices = require('../services/user')
 
+//  Express validator validating input in the server side.
 module.exports = {
     confirmPassword: () => {
        return [
@@ -23,15 +25,22 @@ module.exports = {
         ]
     },
 
+    //  post request after the server side validadtion.
     userValidation: (req, res) => {
         const errors = validationResult(req);
-        console.log(req.body);
-
+        
         if (!errors.isEmpty()) {
-            return res.status(422).jsonp(errors.array());
-
-        } else {
-            res.send("success");
+            return res.status(422).json(errors.array());
+            
         }
-    }
+        else {
+            userServices.doSignUp(req.body).then((data) => {
+                res.render('user/sign-up', {message : "Registration successful"})
+            })
+           
+           
+        } 
+        
+    },
+    
 }
