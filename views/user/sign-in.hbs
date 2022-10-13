@@ -4,30 +4,31 @@
             <div class="col-12 col-md-8 col-lg-5 col-xl-5">
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
                     <div class="card-body text-center">
+                        <form action="/login" method="post" enctype="multipart/form-data">
+                            <div class="">
 
-                        <div class="">
+                                <h2 class="fw-bold text-uppercase">Login</h2>
+                                <p class="text-white-50 ">Please enter your login and password!</p>
+                                <div class="form-outline form-white">
+                                    <input type="email" name="loginEmail" id="typeEmailX" value="{{loginErr}}"
+                                        class="form-control w-75 mx-auto form-control-md {{#if loginErr}}text-danger{{/if}}" />
+                                    <label class="form-label" for="typeEmailX">Email</label>
+                                </div>
 
-                            <h2 class="fw-bold text-uppercase">Login</h2>
-                            <p class="text-white-50 ">Please enter your login and password!</p>
+                                <div class="form-outline form-white">
+                                    <input type="password" name="loginPassword" id="typePasswordX"  value="{{loginErr}}"
+                                        class="form-control w-75 mx-auto form-control-md {{#if loginErr}}text-danger{{/if}}" />
+                                    <label class="form-label" for="typePasswordX">Password</label>
+                                </div>
 
-                            <div class="form-outline form-white">
-                                <input type="email" id="typeEmailX" class="form-control w-75 mx-auto form-control-md" />
-                                <label class="form-label" for="typeEmailX">Email</label>
+                                <p class="small pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
+
+                                <button class="btn btn-outline-light btn-md px-4" type="submit">Login</button>
+
                             </div>
-
-                            <div class="form-outline form-white">
-                                <input type="password" id="typePasswordX" class="form-control w-75 mx-auto form-control-md" />
-                                <label class="form-label" for="typePasswordX">Password</label>
-                            </div>
-
-                            <p class="small pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
-
-                            <button class="btn btn-outline-light btn-md px-4" type="submit">Login</button>
-
-                        </div>
-
-                        <div  class="mt-3">
-                            <p>Don't have an account? <a href="/signUp" class="text-white-50 fw-bold">Sign Up</a>
+                        </form>
+                        <div class="mt-3">
+                            <p>Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a>
                             </p>
                         </div>
 

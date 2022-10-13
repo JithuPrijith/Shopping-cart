@@ -1,6 +1,7 @@
 <section>
     <div class="container-fluid">
-        <form action="/admin/add-product" class="w-100 row mt-3 d-flex justify-content-center" method="post" enctype="multipart/form-data">
+        <form action="/admin/add-product" class="w-100 row mt-3 d-flex justify-content-center" method="post"
+            enctype="multipart/form-data">
             <div class="col-6 bg-secondary">
                 <div class="mt-4">
                     <label for="" class="inline-block" style="width: 7rem" ;>Name</label>
@@ -19,14 +20,25 @@
                     <input type="text" style="width: 20rem" name="price">
                 </div>
                 <div class="mt-4">
+                    <div><img class="img img-fluid mx-auto"  style="width:100px ; height:80px;" id="preview"></div>
                     <label for="" class="inline-block" style="width: 7rem" ;>Add Image</label>
-                    <input type="file" style="width: 20rem" name="image">
+                    <input type="file" style="width: 20rem" name="image" id="image" onchange="imagePreview(event)">
+                    
                 </div>
                 <div class="m-2 d-flex justify-content-center">
                     <button type="submit" class="btn btn-success">Add data</button>
                 </div>
-
+                
             </div>
         </form>
     </div>
 </section>
+<script>
+    function imagePreview(event) {
+       let src = URL.createObjectURL(event.target.files[0]);
+       var preview = document.getElementById('image')
+       var previewdiv = document.getElementById('preview')
+       previewdiv.src = src;
+       previewdiv.style.display = "block";
+    }
+</script>

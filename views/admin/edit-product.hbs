@@ -1,0 +1,32 @@
+<section>
+    <div class="container-fluid">
+        <form action="/admin/edit-product?value={{productId}}" class="w-100 row mt-3 d-flex justify-content-center" method="post" enctype="multipart/form-data">
+            <div class="col-6 bg-secondary">
+                <div class="mt-4">
+                    <label for="" class="inline-block" style="width: 7rem" ;>Name</label>
+                    <input type="text" style="width: 20rem" name="editedName">
+                </div>
+                <div class="mt-4">
+                    <label for="" class="inline-block" style="width: 7rem" ;>Category</label>
+                    <input type="text" style="width: 20rem" name="editedCategory">
+                </div>
+                <div class="mt-4">
+                    <label for="" class="inline-block" style="width: 7rem" ;>Description</label>
+                    <input type="text" style="width: 20rem" name="editedDescription">
+                </div>
+                <div class="mt-4">
+                    <label for="" class="inline-block" style="width: 7rem" ;>Price</label>
+                    <input type="text" style="width: 20rem" name="editedPrice">
+                </div>
+                <div class="mt-4">
+                    <label for="" class="inline-block" style="width: 7rem" ;>Add Image</label>
+                    <input type="file" style="width: 20rem" name="editedImage">
+                </div>
+                <div class="m-2 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success">Edit data</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</section>

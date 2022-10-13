@@ -3,22 +3,40 @@ const bcrypt = require('bcrypt');
 
 
 module.exports = {
-    doSignUp: (userDetails) => {
+    doSignUp: async (req,res) => {
         try {
-            return new Promise(async (resolve, reject) => {
-                userDetails.userPassword = await bcrypt.hash(userDetails.userPassword, 10)
-                await new userData(userDetails).save()
-                    .then((data) => {
-                        resolve(data)
+            const userExist = await userData.findOne({ userEmail: req.body.userEmail })
+            if (userExist) {
+                req.session.loginErr = "username or email already exist";
+                console.log("username or email already exist");
+                res.render('user/sign-in');
+            }
+            else {
+                return new Promise(async (resolve, reject) => {
+                    req.body.userPassword = await bcrypt.hash(req.body.userPassword, 10)
+                    await new userData(req.body).save()
+                        .then((data) => {
+                            resolve(data)
+                        })
+                })
+            }
 
-                    })
-            })
 
         } catch (error) {
-            console.log(error)
+            console.log("catch", error)
         }
     },
 
+    verifyUser:(req,res,next)=>{
+        if(req.session.loggedIn){
+            next();
+            console.log("vannu");
+        }
+        else{
+            res.redirect('/login')
+            console.log("vannu2");
+        }
+    }
 
 
 }

@@ -1,10 +1,13 @@
+var express = require('express')
 const { body, validationResult, check } = require('express-validator');
-const userServices = require('../services/user')
+const { doSignUp, verifyUser } = require('../services/user')
+const userData = require('../models/user-signup')
+const bcrypt = require('bcrypt')
 
 //  Express validator validating input in the server side.
 module.exports = {
     confirmPassword: () => {
-       return [
+        return [
 
             check('username')
                 .trim()
@@ -28,19 +31,73 @@ module.exports = {
     //  post request after the server side validadtion.
     userValidation: (req, res) => {
         const errors = validationResult(req);
-        
+
         if (!errors.isEmpty()) {
-            return res.status(422).json(errors.array());
-            
+            return res.render('user/sign-up', { errors })
+
         }
         else {
-            userServices.doSignUp(req.body).then((data) => {
-                res.render('user/sign-up', {message : "Registration successful"})
+            doSignUp(req,res).then((data) => {
+                req.session.loggedIn = true;
+                req.session.user = req.body;
+                res.redirect('/');
             })
-           
-           
-        } 
-        
+
+
+        }
+
     },
-    
+
+    doSignin: (req, res) => {
+        try {
+            return new Promise(async (resolve, reject) => {
+
+                let user = await userData.findOne({ userEmail: req.body.loginEmail })
+                if (user) {
+                    bcrypt.compare(req.body.loginPassword, user.userPassword).then((status) => {
+                        if (status) {
+                            req.session.loggedIn = true;
+                            req.session.user = user;
+                            res.redirect('/');
+                        }
+                        else {
+                            resolve({ status: false })
+                            req.session.loginErr = "incorrect password";
+                            res.render('user/sign-in', { "loginErr": req.session.loginErr })
+                            req.session.loginErr = null;
+                        }
+                    })
+                }
+                else {
+                    resolve({ status: false })
+                    req.session.loginErr = "incorrect email";
+                    res.render('user/sign-in', { "loginErr": req.session.loginErr })
+                    req.session.loginErr = null;
+                }
+
+            })
+
+
+        } catch (error) {
+            console.log("ok", error);
+        }
+    },
+
+    doLogout: (req, res) => {
+        req.session.destroy();
+        res.redirect('/');
+    },
+
+    cart: (req, res) => {
+        try {
+            res.render('user/cart')
+
+        } catch (error) {
+
+        }
+
+    }
+
+
+
 }

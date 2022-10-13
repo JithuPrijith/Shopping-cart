@@ -27,7 +27,59 @@ module.exports = {
         }
 
     },
-    
+
+    deleteProduct: async (req, res) => {
+
+        try {
+            let productId = req.params.value;
+            products.deleteOne({ _id: productId }).then((data) => {
+                res.redirect('/admin');
+            })
+        } catch (error) {
+
+        }
+    },
+    editProductPage: (req, res) => {
+        let productId = req.query.value;
+        res.render('admin/edit-product', { productId })
+    },
+
+    editProduct: (req, res) => {
+        try {
+            let productId = req.query.value;
+            products.updateOne({ _id: productId }, {
+                $set: {
+                    name: req.body.editedName,
+                    category: req.body.editedCategory,
+                    description: req.body.editedDescription,
+                    price: req.body.editedPrice
+                }
+            }).then(async(data) => {
+                res.redirect('/admin');
+                return new Promise((resolve, reject) => {
+                    if (req.files.editedImage) {
+                        let image = req.files.editedImage;
+                        
+                        image.mv('./public/product-images/' + productId + '.png', (error, done) => {
+                            if (error) {
+                                console.log("image mov",error)
+                            }
+                            else {
+                                console.log("image mov1")
+                               
+                            }
+                        })
+                    }    
+                }).then((data)=> {
+                    res.redirect('/admin');
+                })
+                
+            })
+        } catch (error) {
+            console.log("catch", error);
+        }
+
+    }
 }
 
 
