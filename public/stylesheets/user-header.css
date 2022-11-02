@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Dangrek&family=Open+Sans&display=swap');
+
+body {
+    font-family: 'Dangrek', cursive;
+    font-family: 'Open Sans', sans-serif;
+    color: rgb(12, 12, 12);
+    background-color: rgb(255, 255, 255);
+    overflow-x: hidden;
+}
+
+.navbar-brand {
+    margin-left: 4em;
+    font-weight: bolder;
+    font-size: xx-large;
+    font-family: 'Dangrek', cursive;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: .1em;
+}
+
+.user-header-brand-name {
+    color: rgb(247, 68, 78);
+}
+
+.navbar {
+    font-weight: bold;
+    font-size: medium;
+    background-color: 	#f0e4e4;
+}
+
+.user-header-navlink {
+    margin-left: 10em;
+}
+.nav-link{
+    margin: 0 .5em;
+    font-weight: bold;
+    font-size: medium;
+    color:black!important
+}
+.nav-link:hover {
+    transition: ease;
+    color:rgb(247, 68, 78) !important;
+}
+/* *{border: 1px solid red;} */

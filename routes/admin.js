@@ -14,8 +14,8 @@ router.get('/', function (req, res) {
 
 
 //  admin add data display page
-router.get('/add-product', (req, res, next) => {
-  res.render('admin/add-product')
+router.get('/add-product', (req, res) => {
+  res.render('admin/add-product',{ admin: true})
 })
 
 

@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 
 module.exports = {
-    doSignUp: async (req,res) => {
+    doSignUp: async (req, res) => {
         try {
             const userExist = await userData.findOne({ userEmail: req.body.userEmail })
             if (userExist) {
@@ -27,12 +27,12 @@ module.exports = {
         }
     },
 
-    verifyUser:(req,res,next)=>{
-        if(req.session.loggedIn){
-            next();
-            console.log("vannu");
+    verifyUser: (req, res, next) => {
+        console.log(req.session.loggedIn);
+        if (req.session.loggedIn) {
+             next();
         }
-        else{
+        else {
             res.redirect('/login')
             console.log("vannu2");
         }

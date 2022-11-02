@@ -1,0 +1,16 @@
+.banner-section {
+    height: 80vh;
+    background: url(../display-images/slider-bg.jpg);
+    border: 1px solid red;
+    background-repeat: no-repeat;
+  background-size: cover;
+}
+.user-banner-heading{
+    color:rgb(247, 68, 78)
+}
+.body{
+  background-color: blue;
+}
+.user-cart{
+  background-color: #f0e4e4;
+}

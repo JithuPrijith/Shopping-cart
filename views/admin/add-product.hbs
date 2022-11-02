@@ -1,44 +1,45 @@
 <section>
     <div class="container-fluid">
-        <form action="/admin/add-product" class="w-100 row mt-3 d-flex justify-content-center" method="post"
-            enctype="multipart/form-data">
-            <div class="col-6 bg-secondary">
-                <div class="mt-4">
-                    <label for="" class="inline-block" style="width: 7rem" ;>Name</label>
-                    <input type="text" style="width: 20rem" name="name">
+        <div class="row justify-content-center">
+            <form action="/admin/add-product" class=" w-50"  method="post" enctype="multipart/form-data">
+                <div class="col-12  p-2">
+                    <div class="mt-4 ml-5">
+                        <label for="" class="inline-block " style="width: 17rem" ;>Name</label>
+                        <input type="text" class="" style="width: 23rem" name="name">
+                    </div>
+                    <div class="mt-4 ml-5">
+                        <label for="" class="inline-block" style="width: 17rem" ;>Category</label>
+                        <input type="text" style="width: 23rem" name="category">
+                    </div>
+                    <div class="mt-4 ml-5">
+                        <label for="" class="inline-block" style="width: 17rem" ;>Description</label>
+                        <input type="text" style="width: 23rem" name="description">
+                    </div>
+                    <div class="mt-4 ml-5">
+                        <label for="" class="inline-block" style="width: 17rem" ;>Price</label>
+                        <input type="text" style="width: 23em" name="price">
+                    </div>
+                    <div class="mt-4 ml-5">
+                        <div class="mx-auto" style="width: 100px; height: 80px;"><img class="img img-fluid" src=""  id="preview"></div>
+                        <label for="" class="inline-block" style="width: 17rem" ;>Add Image</label>
+                        <input type="file" style="width: 23rem" name="image" id="image" onchange="imagePreview(event)">
+
+                    </div>
+                    <div class="m-2 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-success">Add data</button>
+                    </div>
                 </div>
-                <div class="mt-4">
-                    <label for="" class="inline-block" style="width: 7rem" ;>Category</label>
-                    <input type="text" style="width: 20rem" name="category">
-                </div>
-                <div class="mt-4">
-                    <label for="" class="inline-block" style="width: 7rem" ;>Description</label>
-                    <input type="text" style="width: 20rem" name="description">
-                </div>
-                <div class="mt-4">
-                    <label for="" class="inline-block" style="width: 7rem" ;>Price</label>
-                    <input type="text" style="width: 20rem" name="price">
-                </div>
-                <div class="mt-4">
-                    <div><img class="img img-fluid mx-auto"  style="width:100px ; height:80px;" id="preview"></div>
-                    <label for="" class="inline-block" style="width: 7rem" ;>Add Image</label>
-                    <input type="file" style="width: 20rem" name="image" id="image" onchange="imagePreview(event)">
-                    
-                </div>
-                <div class="m-2 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-success">Add data</button>
-                </div>
-                
-            </div>
-        </form>
+            </form>
+        </div>
+
     </div>
 </section>
 <script>
     function imagePreview(event) {
-       let src = URL.createObjectURL(event.target.files[0]);
-       var preview = document.getElementById('image')
-       var previewdiv = document.getElementById('preview')
-       previewdiv.src = src;
-       previewdiv.style.display = "block";
+        let src = URL.createObjectURL(event.target.files[0]);
+        var preview = document.getElementById('image')
+        var previewdiv = document.getElementById('preview')
+        previewdiv.src = src;
+        previewdiv.style.display = "block";
     }
 </script>

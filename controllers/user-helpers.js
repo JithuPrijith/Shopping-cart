@@ -1,8 +1,12 @@
 var express = require('express')
 const { body, validationResult, check } = require('express-validator');
 const { doSignUp, verifyUser } = require('../services/user')
-const userData = require('../models/user-signup')
+const { cartDisplay, cartCount ,cartChangeQuantity } = require('../services/product')
+const userData = require('../models/user-signup');
+const userCart = require('../models/user-cart');
 const bcrypt = require('bcrypt')
+const { Types, default: mongoose } = require('mongoose')
+
 
 //  Express validator validating input in the server side.
 module.exports = {
@@ -37,13 +41,11 @@ module.exports = {
 
         }
         else {
-            doSignUp(req,res).then((data) => {
+            doSignUp(req, res).then((data) => {
                 req.session.loggedIn = true;
                 req.session.user = req.body;
                 res.redirect('/');
             })
-
-
         }
 
     },
@@ -51,7 +53,6 @@ module.exports = {
     doSignin: (req, res) => {
         try {
             return new Promise(async (resolve, reject) => {
-
                 let user = await userData.findOne({ userEmail: req.body.loginEmail })
                 if (user) {
                     bcrypt.compare(req.body.loginPassword, user.userPassword).then((status) => {
@@ -74,9 +75,7 @@ module.exports = {
                     res.render('user/sign-in', { "loginErr": req.session.loginErr })
                     req.session.loginErr = null;
                 }
-
             })
-
 
         } catch (error) {
             console.log("ok", error);
@@ -88,16 +87,76 @@ module.exports = {
         res.redirect('/');
     },
 
-    cart: (req, res) => {
+    addToCart: async (req, res) => {
+        let product = req.params.id;
         try {
-            res.render('user/cart')
+            return new Promise(async (resolve, reject) => {
+                let productObject = {
+                    productId: Types.ObjectId(req.params.id),
+                    quantity: 1,
+                }
+                let userCartOnDb = await userCart.findOne({ userId: req.session.user._id })
+                if (userCartOnDb) {
+                    // userCartOnDb.products.productId.push(Types.ObjectId(req.params.id))
+                    //   await  userCart(userCartOnDb).save()
+                    let productExist = userCartOnDb.products.findIndex((data) => { return data.productId == product })
+                    if (productExist != -1) {
+                        await userCart.updateOne(
+                            { 'products.productId': Types.ObjectId(product) },
+                            {
+                                $inc: { 'products.$.quantity': 1 }
+                            }
+                        ).then((data) => {
+                            resolve(data)
+                        })
+                    }
+                    else {
+                        userCart.findOneAndUpdate(
+                            { userId: req.session.user._id },
+                            { $push: { 'products': productObject } }
+                        ).then((data) => {
+                            resolve(data)
+                        })
+                    }
+
+
+                }
+                else {
+                    let cartObject = {
+                        userId: req.session.user._id,
+                        products: [productObject]
+                    }
+                    await new userCart(cartObject).save()
+                    .then((data) => {
+                        resolve(data)  
+                    })
+                }
+            }).then(async (data) => {
+                res.json(data)
+            }).catch((err) => {
+                console.log("reject", err);
+            })
 
         } catch (error) {
 
         }
+    },
+    cartController: async (req, res) => {
+        let cartcount = await cartCount(req.session.user._id)
+        await cartDisplay(req.session.user._id).then(async (cartItems) => {
+            res.render('user/cart', { cartItems, cartcount})
+        })
+    },
 
+    cartQuantityController : async (req,res,next) => {
+        let cartData = {
+            productId : req.body.product,
+            userId : req.session.user._id,
+            count : req.body.count,
+        }
+        cartChangeQuantity(cartData).then(async (data)=>{
+            // let userCartOnDb = await userCart.findOne({ userId: cartData.userId })
+            res.json({status : true, count : data.count})
+        })
     }
-
-
-
 }
