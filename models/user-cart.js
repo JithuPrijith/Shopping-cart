@@ -8,7 +8,7 @@ const productSchema = new schema({
     },
     quantity: {
         type: Number,
-        required: true
+        required: true,
     }
 })
 

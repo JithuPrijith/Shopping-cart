@@ -1,6 +1,6 @@
 const userCart = require('../models/user-cart')
 const { Types, default: mongoose } = require('mongoose')
-const { doLogout } = require('../controllers/user-helpers')
+const { doLogout, cartRemoveController } = require('../controllers/user-helpers')
 module.exports = {
     cartCount: async (requserId) => {
         try {
@@ -51,7 +51,6 @@ module.exports = {
                     }
 
                 ])
-                console.log(cartItems,"here",cartItems.products);
                 resolve(cartItems)
             })
         } catch (error) {
@@ -63,24 +62,25 @@ module.exports = {
         try {
             return new Promise(async (resolve, reject) => {
                 let userCartOnDb = await userCart.findOne({ userId: data.userId })
-                let productExist = userCartOnDb.products.findIndex((here) => { return here.productId == data.productId })
+                let productExist =  userCartOnDb.products.findIndex((here) => { return here.productId == data.productId })
+                let quantity = await userCartOnDb.products[productExist].quantity;
                 if (productExist != -1) {
                     if (data.count == '1') {
-                        console.log("addworks");
+                        console.log(data.count,".......",quantity);
                         await userCart.updateOne({ 'products.productId': Types.ObjectId(data.productId) },
                             {
                                 $inc: { 'products.$.quantity': parseInt(data.count) }
-                            }).then((data) => {
-                                resolve({ count: 1 })
+                            }).then(() => {
+                                resolve({ count: data.count })
                             })
                     }
-                    else if (data.count == '-1') {
-                        console.log("subworks");
+                    else if (data.count == '-1' && quantity > 1) {
+                        console.log(data.count,".......",quantity);
                         await userCart.updateOne({ 'products.productId': Types.ObjectId(data.productId) },
                             {
                                 $inc: { 'products.$.quantity': parseInt(data.count) }
-                            }).then((data) => {
-                                resolve({ count: -1 })
+                            }).then(() => {
+                                resolve({ count: data.count })
                             })
                     }
                 }
@@ -88,7 +88,23 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
-
-
+    },
+    cartRemoveItem : (data) => {
+        try {
+            return new Promise(async (resolve, reject) => {
+                let userCartOnDb = await userCart.findOne({ userId: data.userId })
+                let productExist = userCartOnDb.products.findIndex((here) => { return here.productId == data.productId })
+                if(userCartOnDb && productExist != -1){
+                   await userCart.updateOne({ 'products.productId' : Types.ObjectId(data.productId)},
+                   {
+                    $pull : {products :{ productId : Types.ObjectId(data.productId) }}
+                   }).then((data) => {
+                    resolve({status :true})
+                   })
+                }
+            })
+        } catch (error) {
+            
+        }
     }
 }

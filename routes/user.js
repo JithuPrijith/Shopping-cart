@@ -3,7 +3,16 @@ var express = require('express');
 const { checkSchema } = require('express-validator');
 var router = express.Router();
 var adminHelpers = require('../controllers/admin-helpers')
-var { confirmPassword, userValidation, doSignin, doLogout, cartDisplay, addToCart, cartController ,cartQuantityController } = require('../controllers/user-helpers');
+
+var { confirmPassword,
+   userValidation,
+   doSignin,
+   doLogout,
+   addToCart,
+   cartController,
+   cartQuantityController,
+   cartRemoveController } = require('../controllers/user-helpers');
+
 const { validate } = require('../models/add-product');
 const { verifyUser } = require('../services/user');
 const { cartCount } = require('../services/product')
@@ -59,6 +68,8 @@ router.get('/add-to-cart/:id',verifyUser,addToCart)
 /* ---------------------------------- cart post change quantity -----------------------------*/
 router.post('/change-quantity',verifyUser,cartQuantityController)
 
+/* ---------------------------------- cart remove button get -----------------------------*/
+router.get('/remove-from-cart/:id',cartRemoveController)
 
 
 module.exports = router;

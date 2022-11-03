@@ -1,29 +1,4 @@
-<section id="parent">
-    {{#each cartItems}}
 
-    <div class="container-fluid mb-4 border border-5">
-        <div class="row justify-content-center">
-            <div class="col-8 d-flex mt-4">
-                <div class="col-4 d-flex justify-content-center align-items-center user-cart">
-                    <img src="/product-images/{{this.productId}}.png" class="img w-50 h-50 img-fluid" alt="">
-                </div>
-                <div class="col-8 mb-2">
-                    <h3>{{this.products.name}}<span class="float-right mt-5">$ {{this.products.price}}</span></h3>
-                    <p>{{this.products.category}}</p>
-                    <p>{{this.products.description}}</p>
-
-                    <a href="" class="btn btn-success">Quantity</a>
-                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','-1')">-</button>
-                    <a class="btn btn-info ml-1" id="{{this.productId}}">{{this.quantity}}</a>
-                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','1')">+</button>
-                    <button class="btn btn-danger ml-3" onclick="removeFromCart('{{this.productId}}')">Remove</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{/each}}
-</section>
-{{!-- <script>
     function changeQuantity(productId, value) {
         $.ajax({
             url: '/change-quantity',
@@ -63,4 +38,3 @@
 
         })
     }
-</script> --}}

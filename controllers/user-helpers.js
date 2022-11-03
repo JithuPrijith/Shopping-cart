@@ -1,7 +1,7 @@
 var express = require('express')
 const { body, validationResult, check } = require('express-validator');
 const { doSignUp, verifyUser } = require('../services/user')
-const { cartDisplay, cartCount ,cartChangeQuantity } = require('../services/product')
+const { cartDisplay, cartCount, cartChangeQuantity, cartRemoveItem} = require('../services/product')
 const userData = require('../models/user-signup');
 const userCart = require('../models/user-cart');
 const bcrypt = require('bcrypt')
@@ -127,9 +127,9 @@ module.exports = {
                         products: [productObject]
                     }
                     await new userCart(cartObject).save()
-                    .then((data) => {
-                        resolve(data)  
-                    })
+                        .then((data) => {
+                            resolve(data)
+                        })
                 }
             }).then(async (data) => {
                 res.json(data)
@@ -144,19 +144,28 @@ module.exports = {
     cartController: async (req, res) => {
         let cartcount = await cartCount(req.session.user._id)
         await cartDisplay(req.session.user._id).then(async (cartItems) => {
-            res.render('user/cart', { cartItems, cartcount})
+            res.render('user/cart', { cartItems, cartcount })
         })
     },
 
-    cartQuantityController : async (req,res,next) => {
+    cartQuantityController: async (req, res) => {
         let cartData = {
-            productId : req.body.product,
-            userId : req.session.user._id,
-            count : req.body.count,
+            productId: req.body.product,
+            userId: req.session.user._id,
+            count: req.body.count,
         }
-        cartChangeQuantity(cartData).then(async (data)=>{
-            // let userCartOnDb = await userCart.findOne({ userId: cartData.userId })
-            res.json({status : true, count : data.count})
+        cartChangeQuantity(cartData).then(async (data) => {
+            res.json({ status: true, count: data.count })
+        })
+    },
+
+    cartRemoveController: async (req, res) => {
+        let data = {
+            productId : req.params.id,
+            userId : req.session.user._id
+        }
+        await cartRemoveItem(data).then((data)=>{
+            res.json({status : true})
         })
     }
 }
