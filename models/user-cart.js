@@ -24,7 +24,8 @@ const userCartSchema = new schema(
         },
         totalPrice: {
             type: Number,
-        }
+        },
+        
 
     }
 )

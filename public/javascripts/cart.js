@@ -1,5 +1,5 @@
 
-    function changeQuantity(productId, value) {
+    function changeQuantity(productId, value,price) {
         $.ajax({
             url: '/change-quantity',
             data: {
@@ -8,14 +8,19 @@
             },
             method: 'post',
             success: (response) => {
-                if (response.count) {
-                    let count = document.getElementById(productId).innerHTML;
-                    count = parseInt(count) + parseInt(response.count);
-                    document.getElementById(productId).innerHTML = count;
-                }
+                let productsArray = response.products;
+                let productDetails = productsArray.filter((val) => { return val.productId == productId})
+                let quantity = productDetails[0].quantity
+                document.getElementById(productId).innerHTML = quantity;
+                document.getElementById('total-price').innerHTML = response.totalAmount.totalPrice[0].total;
             }
         })
     }
+
+
+
+
+
     function removeFromCart(productId) {
         $.ajax({
             url: '/remove-from-cart/' + productId,
@@ -34,6 +39,7 @@
                         }
                     })
                 }
+                
             }
 
         })

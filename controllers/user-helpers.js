@@ -1,11 +1,13 @@
 var express = require('express')
 const { body, validationResult, check } = require('express-validator');
 const { doSignUp, verifyUser } = require('../services/user')
-const { cartDisplay, cartCount, cartChangeQuantity, cartRemoveItem} = require('../services/product')
+const { cartDisplay, cartCount, cartChangeQuantity, cartRemoveItem, totalPrice, productData, placeOrder } = require('../services/product')
 const userData = require('../models/user-signup');
 const userCart = require('../models/user-cart');
 const bcrypt = require('bcrypt')
-const { Types, default: mongoose } = require('mongoose')
+const { Types, default: mongoose, connect } = require('mongoose');
+const { json } = require('body-parser');
+const {saveAddress, getAddress} = require('../services/order')
 
 
 //  Express validator validating input in the server side.
@@ -142,9 +144,11 @@ module.exports = {
         }
     },
     cartController: async (req, res) => {
+        console.log("here");
         let cartcount = await cartCount(req.session.user._id)
         await cartDisplay(req.session.user._id).then(async (cartItems) => {
-            res.render('user/cart', { cartItems, cartcount })
+            let totalAmount = await totalPrice(req.session.user._id)
+            res.render('user/cart', { cartItems, cartcount, user: req.session.user, totalAmount: totalAmount.totalPrice[0].total })
         })
     },
 
@@ -155,17 +159,52 @@ module.exports = {
             count: req.body.count,
         }
         cartChangeQuantity(cartData).then(async (data) => {
-            res.json({ status: true, count: data.count })
+            await cartDisplay(cartData.userId).then(async (data) => {
+                let totalAmount = await totalPrice(cartData.userId)
+                let productData = data;
+                res.json({ status: true, products: productData, totalAmount: totalAmount })
+            })
+
         })
     },
 
     cartRemoveController: async (req, res) => {
         let data = {
-            productId : req.params.id,
-            userId : req.session.user._id
+            productId: req.params.id,
+            userId: req.session.user._id
         }
-        await cartRemoveItem(data).then((data)=>{
-            res.json({status : true})
+        await cartRemoveItem(data).then((data) => {
+            res.json({ status: true })
         })
+    },
+
+
+    placeOrderController: async (req, res) => {
+        let userId = req.session.user._id;
+        let productDetails = await cartDisplay(userId)
+        let totalAmount = await totalPrice(userId)
+        let AddressData = await getAddress(userId)
+        res.render('user/order', { productData: productDetails, totalPrice: totalAmount.totalPrice[0].total,addressData :AddressData })
+    },
+
+    saveAddressController: async (req, res) => {
+        let userId = req.session.user._id;
+        let addressData = {
+            deliveryDetails: {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                address: req.body.address,
+                pincode: req.body.pincode,
+                phoneNumber: req.body.phone,
+            }
+        }
+        await saveAddress(addressData,userId).then((data) => {
+            res.json({ addressData: data })
+        })
+    },
+
+    paymentController :(req,res) => {
+        console.log("ivde ethi");
     }
+
 }

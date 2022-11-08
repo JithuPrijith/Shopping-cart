@@ -1,6 +1,6 @@
 const userCart = require('../models/user-cart')
+const userOrder = require('../models/user-order')
 const { Types, default: mongoose } = require('mongoose')
-const { doLogout, cartRemoveController } = require('../controllers/user-helpers')
 module.exports = {
     cartCount: async (requserId) => {
         try {
@@ -43,9 +43,6 @@ module.exports = {
                             as: 'products',
                         }
                     },
-                    // {
-                    //     $unwind: '$product'
-                    // },
                     {
                         $unwind :'$products'
                     }
@@ -106,5 +103,68 @@ module.exports = {
         } catch (error) {
             
         }
+    },
+
+    totalPrice : (userIdp) => {
+        try {
+            return new Promise(async (resolve, reject) => {
+                let totalAmount = await userCart.aggregate([
+                    {
+                        $match : {userId : Types.ObjectId(userIdp)}
+                    },
+                    {
+                        $unwind : '$products'
+                    },
+                    {
+                        $project : {
+                            userId :1,
+                            productId : '$products.productId',
+                            quantity: '$products.quantity'
+                        }
+                    },
+                    {
+                        $lookup : {
+                            from : 'product-datas',
+                            localField: 'productId',
+                            foreignField: '_id',
+                            as: 'products'
+                        }
+                    },
+                    {
+                        $unwind : '$products'
+                    },
+                    {
+                        $project :{
+                            userId :1,
+                            total : { $multiply : ["$quantity", "$products.price"]}
+                        }
+                    },
+                    {
+                        $group :{
+                            _id : "$userId",
+                            total : {$sum : "$total"}
+                        }
+                    }
+                    
+                ])
+                resolve({ totalPrice :totalAmount})
+            })
+        } catch (error) {
+            
+        }
+    },
+
+    placeOrder : (userId,productDetails,totalAmount) => {
+        try {
+            return new Promise(async(resolve, reject) => {
+                let orderSave = {
+                    
+                }
+                resolve()
+            })
+        } catch (error) {
+            
+        }
+        
     }
 }

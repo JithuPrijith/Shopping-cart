@@ -11,10 +11,13 @@ var { confirmPassword,
    addToCart,
    cartController,
    cartQuantityController,
-   cartRemoveController } = require('../controllers/user-helpers');
+   cartRemoveController,
+   placeOrderController,
+   saveAddressController,
+   paymentController } = require('../controllers/user-helpers');
 
 const { validate } = require('../models/add-product');
-const { verifyUser } = require('../services/user');
+const { verifyUser,  userDataOnDb } = require('../services/user');
 const { cartCount } = require('../services/product')
 
 /*******************************************************   user home page  ******************************************************************************/
@@ -71,5 +74,13 @@ router.post('/change-quantity',verifyUser,cartQuantityController)
 /* ---------------------------------- cart remove button get -----------------------------*/
 router.get('/remove-from-cart/:id',cartRemoveController)
 
+/* ---------------------------------- cart remove button get -----------------------------*/
+router.get('/place-order',verifyUser, placeOrderController)
+
+/* ---------------------------------- save address post -----------------------------*/
+router.post('/save-address',verifyUser,saveAddressController)
+
+/* ---------------------------------- save address post -----------------------------*/
+router.get('/proceed-payment',verifyUser,paymentController)
 
 module.exports = router;

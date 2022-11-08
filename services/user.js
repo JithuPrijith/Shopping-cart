@@ -28,6 +28,7 @@ module.exports = {
     },
 
     verifyUser: (req, res, next) => {
+        console.log("hereee");
         console.log(req.session.loggedIn);
         if (req.session.loggedIn) {
              next();
@@ -36,8 +37,7 @@ module.exports = {
             res.redirect('/login')
             console.log("vannu2");
         }
-    }
-
+    },
 
 }
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const deliveryDetails = require('../models/address')
 
 const schema = mongoose.Schema;
 
@@ -21,6 +22,10 @@ const userSchema = new schema ({
     date : {
         type : Date,
         default :Date.now,
+    },
+    address: {
+        deliveryDetails,
+        type :Array
     }
 })
 

@@ -1,66 +1,30 @@
 <section id="parent">
-    {{#each cartItems}}
 
-    <div class="container-fluid mb-4 border border-5">
+
+    <div class="container mb-4 border border-5 bg-info">
         <div class="row justify-content-center">
-            <div class="col-8 d-flex mt-4">
+            {{#each cartItems}}
+            <div class="col-8 d-flex mt-4 border border-5">
                 <div class="col-4 d-flex justify-content-center align-items-center user-cart">
                     <img src="/product-images/{{this.productId}}.png" class="img w-50 h-50 img-fluid" alt="">
                 </div>
                 <div class="col-8 mb-2">
-                    <h3>{{this.products.name}}<span class="float-right mt-5">$ {{this.products.price}}</span></h3>
+                    <h3>{{this.products.name}} <span class="float-right mt-5 " ><span> Rs. </span id="{{this.productId}}price">{{this.products.price}}</span></h3>
                     <p>{{this.products.category}}</p>
                     <p>{{this.products.description}}</p>
 
                     <a href="" class="btn btn-success">Quantity</a>
-                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','-1')">-</button>
+                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','-1','{{this.productId}}price')">-</button>
                     <a class="btn btn-info ml-1" id="{{this.productId}}">{{this.quantity}}</a>
-                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','1')">+</button>
+                    <button class="btn btn-secondary" onclick="changeQuantity('{{this.productId}}','1','{{this.productId}}price')">+</button>
                     <button class="btn btn-danger ml-3" onclick="removeFromCart('{{this.productId}}')">Remove</button>
                 </div>
             </div>
+            {{/each}}
+        </div>
+        <div class="float-right mt-4">
+            <h4>Total : Rs. <span id="total-price">{{totalAmount}}</span></h4>
+            <p><a class="btn btn-success" href="/place-order">Place Order</a></p>
         </div>
     </div>
-    {{/each}}
 </section>
-{{!-- <script>
-    function changeQuantity(productId, value) {
-        $.ajax({
-            url: '/change-quantity',
-            data: {
-                product: productId,
-                count: value,
-            },
-            method: 'post',
-            success: (response) => {
-                if (response.count) {
-                    let count = document.getElementById(productId).innerHTML;
-                    count = parseInt(count) + parseInt(response.count);
-                    document.getElementById(productId).innerHTML = count;
-                }
-            }
-        })
-    }
-    function removeFromCart(productId) {
-        $.ajax({
-            url: '/remove-from-cart/' + productId,
-            method: 'get',
-            success: (response) => {
-                if (response.status) {
-                    $.ajax({
-                        url: '/cart',
-                        method: 'get',
-                        success: (response) => {
-                            var success = $($.parseHTML(response)).filter("#parent");
-                            $('#parent').html(success)
-                            let count = $('#cart-count').html()
-                            count =  count - 1
-                            $('#cart-count').html(count)
-                        }
-                    })
-                }
-            }
-
-        })
-    }
-</script> --}}
