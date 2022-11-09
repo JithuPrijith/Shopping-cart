@@ -154,17 +154,5 @@ module.exports = {
         }
     },
 
-    placeOrder : (userId,productDetails,totalAmount) => {
-        try {
-            return new Promise(async(resolve, reject) => {
-                let orderSave = {
-                    
-                }
-                resolve()
-            })
-        } catch (error) {
-            
-        }
-        
-    }
+   
 }

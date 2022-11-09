@@ -14,6 +14,7 @@ var { confirmPassword,
    cartRemoveController,
    placeOrderController,
    saveAddressController,
+   checkOutController,
    paymentController } = require('../controllers/user-helpers');
 
 const { validate } = require('../models/add-product');
@@ -81,6 +82,8 @@ router.get('/place-order',verifyUser, placeOrderController)
 router.post('/save-address',verifyUser,saveAddressController)
 
 /* ---------------------------------- save address post -----------------------------*/
-router.get('/proceed-payment',verifyUser,paymentController)
+router.post('/checkout',verifyUser,checkOutController);
 
+/* ---------------------------------- save address post -----------------------------*/
+router.get('/payment-page',verifyUser,paymentController)
 module.exports = router;

@@ -4,9 +4,15 @@ const schema = mongoose.Schema;
 
 
 const userOrderSchema = new schema({
-    orderDetails: {
-        type: Array,
-        required: true,
+    orderId : {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
+    paymentMethod : {
+        type :String
+    },
+    orderedProducts: {
+       type :Array
     },
     deliveryDetails: {
         type: Array,
@@ -14,18 +20,15 @@ const userOrderSchema = new schema({
     },
     totalPrice: {
         type: Number,
-        required: true
+        
     },
-    date: {
-        type: String,
-        required: true,
+    createdOn: {
+        type: Date,
+        
     },
     status: {
         type: String,
-        required: true,
     }
 })
-const userOrder = mongoose.model('user-order', userOrderSchema);
-
-module.exports = userOrder;
+module.exports = userOrderSchema;
     

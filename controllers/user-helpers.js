@@ -1,13 +1,14 @@
 var express = require('express')
 const { body, validationResult, check } = require('express-validator');
 const { doSignUp, verifyUser } = require('../services/user')
-const { cartDisplay, cartCount, cartChangeQuantity, cartRemoveItem, totalPrice, productData, placeOrder } = require('../services/product')
+const { cartDisplay, cartCount, cartChangeQuantity, cartRemoveItem, totalPrice, productData } = require('../services/product')
 const userData = require('../models/user-signup');
 const userCart = require('../models/user-cart');
 const bcrypt = require('bcrypt')
 const { Types, default: mongoose, connect } = require('mongoose');
 const { json } = require('body-parser');
-const {saveAddress, getAddress} = require('../services/order')
+const {saveAddress, getAddress, checkOut,getRazorpay} = require('../services/order');
+
 
 
 //  Express validator validating input in the server side.
@@ -203,8 +204,38 @@ module.exports = {
         })
     },
 
-    paymentController :(req,res) => {
-        console.log("ivde ethi");
+    checkOutController :(req,res) => {
+        try {
+            return new Promise(async (resolve, reject) => {
+                let reqUserId = Types.ObjectId(req.session.user._id)
+                let usercartData = await userCart.findOne({userId: reqUserId})
+                let totalAmount = await totalPrice(reqUserId)
+                let userDatas = await userData.findOne({userId: reqUserId})
+                let paymentMethod = req.body.payment;
+                let addressIndex = req.body.addressIndex;
+                // console.log(req.body.payment,req.body.addressIndex);
+                await checkOut(reqUserId,usercartData,totalAmount,userDatas,paymentMethod,addressIndex).then(async (data) => {
+                    if(paymentMethod == 'online'){
+                        let orderId = data.orderDetails[0].orderId
+                        let totalPrice =data.orderDetails[0].totalPrice
+                        await getRazorpay(orderId,totalPrice).then((order) => {
+                            res.json({order :order})
+                        })
+                    }
+                    else {
+                        res.json({cod : true})
+                    }
+                    
+                })
+            })
+        } catch (error) {
+            
+        }
+        
+        
+    },
+    paymentController:(req,res)=>{
+        res.render('user/payment')
     }
 
 }

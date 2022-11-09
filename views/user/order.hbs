@@ -80,7 +80,8 @@
                         <p class="text-uppercase fw-bold mb-3 text-font">Saved address</p>
                         <div>
                             {{#addressData}}
-                            <input type="radio" id="{{@index}}" class="address-radio" name="address" value="{{@index}}"> <label for="{{@index}}">
+                            <input type="radio" id="{{@index}}" class="address-radio" name="address" value="{{@index}}">
+                            <label for="{{@index}}">
                                 <p>{{this.firstName}}
                                     {{this.lastName}}</br>
                                     {{this.address}}</br>
@@ -194,8 +195,8 @@
                         </div>
                     </div>
                     <div class="text-center mb-2">
-                        <button type="submit" onclick="proceedPayment()" class="btn button-order col-md-10">Proceed
-                            Payment</button>
+                        <button type="submit" onclick="checkOut()" class="btn button-order col-md-10">Checkout</button>
+                        
                     </div>
                 </div>
             </div>
@@ -205,11 +206,9 @@
 
 
 </div>
-
-
 </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-
     function saveAddress() {
         $("#save-address").submit(function (event) {
             event.preventDefault(); //prevent default action 
@@ -238,7 +237,7 @@
             });
         });
     }
-    function proceedPayment() {
+    function checkOut() {
         var rates = document.getElementsByClassName('address-radio');
         var rate_value;
         for (var i = 0; i < rates.length; i++) {
@@ -248,13 +247,64 @@
         }
         var element = document.getElementsByName('payment')
         var paymentMethod;
-         for(i = 0; i < element.length; i++) {
-                if(element[i].checked){
-                    paymentMethod = element[i].value
-                }
-                
+        for (i = 0; i < element.length; i++) {
+            if (element[i].checked) {
+                paymentMethod = element[i].value
             }
-            console.log(rate_value,paymentMethod)
+
+        }
+        console.log(rate_value, paymentMethod)
+
+
+        $.ajax({
+            url: '/checkout',
+            data: {
+                payment: paymentMethod,
+                addressIndex: rate_value,
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.order) {
+                    console.log(response.order, "here")
+                    razorPayment(response.order)
+
+                }
+                else if (response.cod) {
+                    console.log(response.cod)
+                }
+            }
+        })
+    }
+    function razorPayment(order) {
+        console.log(order, order.amount);
+        var options = {
+            "key": "rzp_test_rCqgcSTzd87Bcj", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Aley Shopping",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                console.log(response)
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "8156878009"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open()
     }
 
 </script>

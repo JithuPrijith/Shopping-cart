@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const deliveryDetails = require('../models/address')
+const userOrderSchema = require('../models/user-order')
 
 const schema = mongoose.Schema;
 
@@ -25,6 +26,10 @@ const userSchema = new schema ({
     },
     address: {
         deliveryDetails,
+        type :Array
+    },
+    orderDetails : {
+        userOrderSchema,
         type :Array
     }
 })
